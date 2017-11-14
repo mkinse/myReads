@@ -1,101 +1,14 @@
 import React from 'react'
-import * as BooksAPI from './BooksAPI'
 import PropTypes from 'prop-types'
+import { Route } from 'react-router-dom'
+
+import * as BooksAPI from './BooksAPI'
+import BookList from './BookList'
 
 import './App.css'
 
 
-class Book extends React.Component {
 
-    render()
-      {
-          console.log('Books props:', this.props);
-          return(
-          <div className="book">
-            <div className="book-top">
-              <div className="book-cover" style={{ width:128, height: 193, backgroundImage:`url(${this.props.book.imageLinks.thumbnail})` }} ></div>
-              <div className="book-shelf-changer">
-                <select>
-                  <option value="none" disabled>Move to...</option>
-                  <option value="currentlyReading">Currently Reading</option>
-                  <option value="wantToRead">Want to Read</option>
-                  <option value="read">Read</option>
-                  <option value="none">None</option>
-                </select>
-              </div>
-            </div>
-            <div className="book-title">{this.props.book.title}</div>
-            <div className="book-authors">{this.props.book.authors}</div>
-          </div>
-        );
-      }
-
-  }
-
-
-
-class BookList extends React.Component {
-    static propTypes = {
-        books: PropTypes.array.isRequired,
-  }
-
-  state = {
-    query: ''
-  }
-  render()
-    {
-        const { books } = this.props
-        const { query } = this.state
-
-        console.log('books', this.props.books);
-
-        return (
-        <div className="list-books-content">
-          <div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Currently Reading</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                {books.filter( function (book) {
-                    return (book.shelf === "currentlyReading") }).map( (book) => (
-                  <li key={book.id}>
-                  <Book book={book}/>
-                  </li>))}
-                </ol>
-              </div>
-            </div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Want to Read</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                {books.filter( function (book) {
-                    return (book.shelf === "wantToRead") }).map( (book) => (
-                  <li key={book.id}>
-                  <Book book={book}/>
-                  </li>))}
-                </ol>
-              </div>
-            </div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Read</h2>
-              <div className="bookshelf-books">
-
-
-              <ol className="books-grid">
-              {books.filter( function (book) {
-                  return (book.shelf === "read") }).map( (book) => (
-                <li key={book.id}>
-                <Book book={book}/>
-            </li>))}
-              </ol>
-
-              </div>
-            </div>
-          </div>
-        </div>
-    )
-    }
-}
 
 class BooksApp extends React.Component {
 
@@ -120,7 +33,7 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
+      <Route exact path='/search' render={() => (
           <div className="search-books">
             <div className="search-books-bar">
               <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
@@ -141,20 +54,18 @@ class BooksApp extends React.Component {
               <ol className="books-grid"></ol>
             </div>
           </div>
-        ) : (
+      )}/>
+      <Route exact path='/' render={({ history }) => ( <div className="list-books">
+         <div className="list-books-title">
+           <h1>MyReads</h1>
+         </div>
 
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
+         <BookList books={this.state.books}/>
 
-            <BookList books={this.state.books}/>
-
-            <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
-            </div>
-          </div>
-        )}
+         <div className="open-search">
+           <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+         </div>
+       </div>)}/>
       </div>
     )
   }

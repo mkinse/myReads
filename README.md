@@ -59,7 +59,7 @@ getAll()
 Method Signature:
 
 ```js
-update(book, shelf)
+update(this.props.book, shelf)
 ```
 
 * book: `<Object>` containing at minimum an `id` attribute
