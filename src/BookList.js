@@ -15,8 +15,6 @@ class BookList extends React.Component {
         const { books } = this.props
         const { query } = this.state
 
-        console.log('books', this.props.books);
-
         return (
         <div className="list-books-content">
           <div>
@@ -47,7 +45,6 @@ class BookList extends React.Component {
             <div className="bookshelf">
               <h2 className="bookshelf-title">Read</h2>
               <div className="bookshelf-books">
-
 
               <ol className="books-grid">
               {books.filter( function (book) {

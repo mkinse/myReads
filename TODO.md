@@ -1,5 +1,6 @@
 TODO:
 
+review style guides
 
 1 handle shelf change with update
 
