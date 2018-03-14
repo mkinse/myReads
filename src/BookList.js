@@ -12,15 +12,12 @@ class BookList extends React.Component {
   }
 
   handleShelfChange = (book, shelf) => {
-      console.log('You added something to a shelf:', book);
-      console.log('Here is the event:', shelf);
-      this.props.handleShelfChange(book, shelf);
+      this.props.reloadShelves(book, shelf);
   }
 
   render()
   {
         const { books } = this.props
-
         return (
         <div className="list-books-content">
           <div>
@@ -59,7 +56,6 @@ class BookList extends React.Component {
                 <Book book={book} onShelfChange={ this.handleShelfChange } />
             </li>))}
               </ol>
-
               </div>
             </div>
           </div>
