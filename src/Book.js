@@ -1,39 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-//import PropTypes from 'prop-types'
-
 class Book extends React.Component {
     static propTypes = {
-        onShelfChange: PropTypes.func.isRequired
+        onShelfChange: PropTypes.func.isRequired,
+        book: PropTypes.object.isRequired
       }
 
-    handleShelfChange = (book, shelf) =>
-    {
-        console.log('You passed a book?:', book);
-        console.log('You passed a shelf?:', shelf);
-        //TODO: send all of this up to parent element.
-        this.setState({ [shelf]: shelf })
+    state = {
+        book: this.props.book
+    }
 
-        this.props.onShelfChange(book, shelf);
+    handleShelfChange = (book, newShelf) =>
+    {
+        book.shelf = newShelf;
+        this.setState({ book: book});
+        this.props.onShelfChange(this.state.book, newShelf);
     }
 
     render()
       {
-          const { book } = this.props
-
+          const { book } = this.state
           return(
           <div className="book">
             <div className="book-top">
-            {book.imageLinks.thumbnail ? (
-              <div className="book-cover" style={{ width:128, height: 193, backgroundImage:`url(${this.props.book.imageLinks.thumbnail})` }} ></div>
-          ):(
-              <div className="book-cover" style={{ width:128, height: 193, backgroundImage:`url()` }} ></div>
-          )}
-
-              {this.props.book.shelf ? (
+              <div className="book-cover" style={{ width:128, height: 193, backgroundImage:`url(${ book.imageLinks.thumbnail})` }} ></div>
+              { book.shelf ? (
                   <div className="book-shelf-changer">
-                  <select value={this.props.book.shelf} onChange={(event) => this.handleShelfChange(book, event.target.value)}>
+                  <select value={ book.shelf} onChange={(event) => this.handleShelfChange(book, event.target.value)}>
                    <option value="none" disabled>Move to...</option>
                    <option value="currentlyReading">Currently Reading</option>
                    <option value="wantToRead">Want to Read</option>
@@ -43,7 +37,7 @@ class Book extends React.Component {
                  </div>
              ) : (
                  <div className="add-book-button">
-                 <select value={this.props.book.shelf ? this.props.book.shelf : 'none'} onChange={(event) => this.handleShelfChange(book, event.target.value)}>
+                 <select value={'none'} onChange={(event) => this.handleShelfChange(book, event.target.value)}>
                   <option value="none" disabled>Move to...</option>
                   <option value="currentlyReading">Currently Reading</option>
                   <option value="wantToRead">Want to Read</option>
@@ -51,11 +45,10 @@ class Book extends React.Component {
                 </select>
                 </div>
             )}
-
-
             </div>
-            <div className="book-title">{this.props.book.title}</div>
-            <div className="book-authors">{this.props.book.authors}</div>
+            <div className="book-title">{ book.title} {book.shelf}</div>
+            <div className="book-authors">{book.authors}</div>
+            <div>{this.state.shelf}</div>
           </div>
         );
       }
