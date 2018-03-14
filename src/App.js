@@ -29,25 +29,34 @@ class BooksApp extends React.Component {
 
   handleShelfChange = (book, shelf) => {
       BooksAPI.update(book, shelf).then( result =>{
+          console.log('App is handling book update...with book:', book.id);
             this.loadBooks();
+            this.searchForBooks(this.state.query);
                 })
   }
 
   searchForBooks = query => {
-      this.setState({ ['foundBooks']: [] });
       console.log('query is:', query);
       BooksAPI.search(query, 20).then(
           searchResult => {
               if(searchResult.error)
               {
-                  console.log('error????', searchResult);
                   this.setState({ foundBooks: [] })
               }else{
-                    console.log('no error...', searchResult);
+                    //TODO: use ES6 to do this better
+                   for (var i = 0; i < this.state.books.length; i++)
+                   {
+                      for (var j = 0; j < searchResult.length; j++)
+                      {
+                          if (searchResult[j].id === this.state.books[i].id)
+                          {
+                              searchResult[j] = this.state.books[i];
+                          }
+                      }
+                   }
                    this.setState({ foundBooks: searchResult })
                }
             }, errorMsg => {
-                console.log('error!', errorMsg);
                 this.setState({ foundBooks: [] })
             })
           }
