@@ -10,10 +10,16 @@ class BookList extends React.Component {
   state = {
     query: ''
   }
+
+  handleShelfChange = (book, shelf) => {
+      console.log('You added something to a shelf:', book);
+      console.log('Here is the event:', shelf);
+      this.props.handleShelfChange(book, shelf);
+  }
+
   render()
-    {
+  {
         const { books } = this.props
-        const { query } = this.state
 
         return (
         <div className="list-books-content">
@@ -25,7 +31,7 @@ class BookList extends React.Component {
                 {books.filter( function (book) {
                     return (book.shelf === "currentlyReading") }).map( (book) => (
                   <li key={book.id}>
-                  <Book book={book}/>
+                  <Book book={book} onShelfChange={ this.handleShelfChange }/>
                   </li>))}
                 </ol>
               </div>
@@ -37,7 +43,7 @@ class BookList extends React.Component {
                 {books.filter( function (book) {
                     return (book.shelf === "wantToRead") }).map( (book) => (
                   <li key={book.id}>
-                  <Book book={book}/>
+                  <Book book={book} onShelfChange={ this.handleShelfChange }/>
                   </li>))}
                 </ol>
               </div>
@@ -50,7 +56,7 @@ class BookList extends React.Component {
               {books.filter( function (book) {
                   return (book.shelf === "read") }).map( (book) => (
                 <li key={book.id}>
-                <Book book={book}/>
+                <Book book={book} onShelfChange={ this.handleShelfChange } />
             </li>))}
               </ol>
 
