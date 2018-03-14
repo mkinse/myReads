@@ -20,7 +20,7 @@ class BooksApp extends React.Component {
   }
 
   loadBooks() {
-    BooksAPI.getAll().then( allBooks => {
+     BooksAPI.getAll().then( allBooks => {
       this.setState({
         books: allBooks
       });
@@ -73,7 +73,6 @@ class BooksApp extends React.Component {
 
     return (
       <div className="app">
-
       <Route exact path='/search' render={({ history }) => (
           <div className="search-books">
             <div className="search-books-bar">
@@ -110,7 +109,7 @@ class BooksApp extends React.Component {
          <div className="list-books-title">
            <h1>MyReads</h1>
          </div>
-         <BookList books={this.state.books} handleShelfChange={this.handleShelfChange} />
+         <BookList books={this.state.books} reloadShelves={this.handleShelfChange} />
          <div className="open-search">
            <Link to='/search' >Add a book</Link>
          </div>
