@@ -13,10 +13,7 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount() {
-          BooksAPI.getAll().then((books) => {
-              console.log('Here are the books from cdu?:', books);
-              this.setState({ books })
-          })
+          this.loadBooks();
   }
 
   loadBooks() {
