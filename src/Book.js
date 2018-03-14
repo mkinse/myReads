@@ -46,7 +46,7 @@ class Book extends React.Component {
                 </div>
             )}
             </div>
-            <div className="book-title">{ book.title} {book.shelf}</div>
+            <div className="book-title">{book.title}</div>
             <div className="book-authors">{book.authors}</div>
             <div>{this.state.shelf}</div>
           </div>
