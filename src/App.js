@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import BookList from './BookList'
+import LoadingOverlay from './LoadingOverlay'
 import Book from './Book'
 import './App.css'
 
@@ -9,33 +10,40 @@ class BooksApp extends React.Component {
     state = {
       books: [],
       foundBooks: [],
-      query: ''
+      query: '',
+      isLoading: false
   }
 
   componentDidMount() {
           BooksAPI.getAll().then((books) => {
-              console.log('Here are the books from cdu?:', books);
+              console.log('Here are all books from cdu?:', books);
               this.setState({ books })
           })
   }
 
   loadBooks() {
+     this.setState({isLoading: true});
      BooksAPI.getAll().then( allBooks => {
       this.setState({
-        books: allBooks
+        books: allBooks,
+        isLoading: false
       });
     });
   }
 
   handleShelfChange = (book, shelf) => {
+      this.setState({isLoading: true});
       BooksAPI.update(book, shelf).then( result =>{
           console.log('App is handling book update...with book:', book.id);
             this.loadBooks();
             this.searchForBooks(this.state.query);
+            this.setState({isLoading: false});
+
                 })
   }
 
   searchForBooks = query => {
+      this.setState({isLoading: true});
       console.log('query is:', query);
       BooksAPI.search(query, 20).then(
           searchResult => {
@@ -43,43 +51,54 @@ class BooksApp extends React.Component {
               {
                   this.setState({ foundBooks: [] })
               }else{
-                    //TODO: use ES6 to do this better
-                   for (var i = 0; i < this.state.books.length; i++)
-                   {
-                      for (var j = 0; j < searchResult.length; j++)
-                      {
-                          if (searchResult[j].id === this.state.books[i].id)
-                          {
-                              searchResult[j] = this.state.books[i];
-                          }
+                  //compare all items in state.books with items in searchResult array
+                  // if there's a match, add attributes from state.books to searchResult
+                  // TODO: use ES6 to do this better
+
+                  const allFoundBooks = searchResult.map( foundBook => {
+                     let existingBook = this.state.books.find( savedBook =>  foundBook.id === savedBook.id )
+                     if (existingBook)
+                     {
+                         console.log('there is an existing book on shelf', existingBook.shelf);
+                          foundBook.shelf = existingBook.shelf;
                       }
-                   }
-                   this.setState({ foundBooks: searchResult })
+                      return foundBook;
+                  })
+                   this.setState({ foundBooks: allFoundBooks })
                }
+               this.setState({isLoading: false});
+
             }, errorMsg => {
-                this.setState({ foundBooks: [] })
+                this.setState({ foundBooks: [], isLoading: false })
             })
           }
 
-  updateQuery = (query) => {
-      this.setState({ query: query.trim() });
-      this.searchForBooks(query);
+  updateQuery = (queryValue) => {
+      if (queryValue !== '')
+      {
+          this.searchForBooks(queryValue);
+      }else{
+          console.log('query is empty', queryValue);
+      }
+      this.setState({ query: queryValue });
     }
 
   render() {
-      const { query } = this.state
-      const { books } = this.state
+      const { query, isLoading } = this.state
       const { foundBooks } = this.state
 
     return (
       <div className="app">
+      { this.state.isLoading && <LoadingOverlay/> }
+
       <Route exact path='/search' render={({ history }) => (
+          
           <div className="search-books">
             <div className="search-books-bar">
               <Link to='/' className="close-search">Close</Link>
               <div className="search-books-input-wrapper">
                 <input type="text" placeholder="Search by title or author"
-                    value={query}
+                    value={ query }
                     onChange={(event) => this.updateQuery(event.target.value)}/>
               </div>
             </div>
