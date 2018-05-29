@@ -43,6 +43,11 @@ class BooksApp extends React.Component {
   }
 
   searchForBooks = query => {
+      if (query.length < 1)
+      {
+          this.setState({ foundBooks: [], isLoading: false })
+          return
+      }
       this.setState({isLoading: true});
       console.log('query is:', query);
       BooksAPI.search(query, 20).then(
@@ -74,12 +79,7 @@ class BooksApp extends React.Component {
           }
 
   updateQuery = (queryValue) => {
-      if (queryValue !== '')
-      {
-          this.searchForBooks(queryValue);
-      }else{
-          console.log('query is empty', queryValue);
-      }
+      this.searchForBooks(queryValue);
       this.setState({ query: queryValue });
     }
 
