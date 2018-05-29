@@ -16,7 +16,6 @@ class BooksApp extends React.Component {
 
   componentDidMount() {
           BooksAPI.getAll().then((books) => {
-              console.log('Here are all books from cdu?:', books);
               this.setState({ books })
           })
   }
@@ -34,7 +33,6 @@ class BooksApp extends React.Component {
   handleShelfChange = (book, shelf) => {
       this.setState({isLoading: true});
       BooksAPI.update(book, shelf).then( result =>{
-          console.log('App is handling book update...with book:', book.id);
             this.loadBooks();
             this.searchForBooks(this.state.query);
             this.setState({isLoading: false});
@@ -49,7 +47,6 @@ class BooksApp extends React.Component {
           return
       }
       this.setState({isLoading: true});
-      console.log('query is:', query);
       BooksAPI.search(query, 20).then(
           searchResult => {
               if(searchResult.error)
@@ -64,10 +61,9 @@ class BooksApp extends React.Component {
                      let existingBook = this.state.books.find( savedBook =>  foundBook.id === savedBook.id )
                      if (existingBook)
                      {
-                         console.log('there is an existing book on shelf', existingBook.shelf);
                           foundBook.shelf = existingBook.shelf;
-                      }
-                      return foundBook;
+                     }
+                     return foundBook;
                   })
                    this.setState({ foundBooks: allFoundBooks })
                }
