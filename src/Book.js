@@ -32,7 +32,7 @@ class Book extends React.Component {
               { book.shelf ? (
                   <div className="book-shelf-changer">
                   <select value={ book.shelf} onChange={(event) => this.handleShelfChange(book, event.target.value)}>
-                   <option value="none" disabled>Move to...</option>
+                   <option value="none" disabled>None</option>
                    <option value="currentlyReading">Currently Reading</option>
                    <option value="wantToRead">Want to Read</option>
                    <option value="read">Read</option>
