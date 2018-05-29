@@ -14,4 +14,4 @@ It is assumed that npm and node.js are installed.
 
 * To install all project dependencies, simply type from within this project: `npm install`
 
-* To start the develop server and interact with this app, simply type  `npm start`. The server should be available at `http://localhost:3000/`
+* To start the develop server and interact with this app, simply type  `npm start`. The server should be available at <http://localhost:3000>
