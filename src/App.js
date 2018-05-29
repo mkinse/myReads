@@ -36,8 +36,7 @@ class BooksApp extends React.Component {
             this.loadBooks();
             this.searchForBooks(this.state.query);
             this.setState({isLoading: false});
-
-                })
+           })
   }
 
   searchForBooks = query => {
