@@ -39,9 +39,9 @@ class BookList extends React.Component {
                 <ol className="books-grid">
                 {books.filter( function (book) {
                     return (book.shelf === "wantToRead") }).map( (book) => (
-                  <li key={book.id}>
-                  <Book book={book} onShelfChange={ this.handleShelfChange }/>
-                  </li>))}
+                      <li key={book.id}>
+                      <Book book={book} onShelfChange={ this.handleShelfChange }/>
+                      </li>))}
                 </ol>
               </div>
             </div>
